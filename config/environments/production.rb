@@ -81,8 +81,7 @@ Rails.application.configure do
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
-    '
-    wallet-dashboard-flax.vercel.app',     # Allow requests from example.com
+    'wallet-dashboard-flax.vercel.app',     # Allow requests from example.com
     /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
   ]
 

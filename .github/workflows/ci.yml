@@ -62,5 +62,6 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
+          SECRET_KEY_BASE: secret_key
         run: |
           bundle exec rspec

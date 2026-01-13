@@ -4,5 +4,82 @@ inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 # Overwrite or add rules to create your own house style
 #
 # # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+# Style/StringLiterals:
+#   Enabled: true
+#   EnforcedStyle: single_quotes
+#   Severity: warning
+
+Layout/HashAlignment:
+  Enabled: true
+  EnforcedHashRocketStyle: key
+  EnforcedColonStyle: key
+
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/IndentationStyle:
+  Enabled: true
+  Style: space
+
+Layout/BlockAlignment:
+  Enabled: true
+  EnforcedStyle: each
+
+Layout/IndentationConsistency:
+  Enabled: true
+  EnforcedStyle: normal
+
+Layout/IndentationWidth:
+  Enabled: true
+  Width: 2
+
+Layout/TrailingWhitespace:
+  Enabled: true
+  Severity: warning
+
+Layout/TrailingEmptyLines:
+  Enabled: true
+  EnforcedStyle: final_newline
+
+Layout/EmptyLines:
+  Enabled: true
+
+Layout/LineLength:
+  Max: 120
+  Severity: warning
+
+Style/StringLiterals:
+  Description: "Enforce the use of single quotes except when string contains interpolation"
+  Enabled: true
+  EnforcedStyle: single_quotes
+  SupportedStyles:
+    - single_quotes
+    - double_quotes
+  ConsistentQuotesInMultiline: true
+
+Style/PercentLiteralDelimiters:
+  Description: "Use %-literal delimiters consistently"
+  Enabled: true
+  PreferredDelimiters:
+    "%": "()"
+    "%i": "[]"
+    "%I": "[]"
+    "%q": "()"
+    "%Q": "()"
+    "%r": "{}"
+    "%s": "()"
+    "%w": "[]"
+    "%W": "[]"
+    "%x": "()"

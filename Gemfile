@@ -19,6 +19,7 @@ gem "thruster", require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"
+gem 'psych', '< 5.0'
 gem 'dotenv', require: 'dotenv/load'
 gem 'apipie-rails'
 gem 'faraday'
@@ -29,7 +30,7 @@ group :development, :test do
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
-
+  gem 'rubocop-rails-omakase', require: false
   gem 'rubocop-rspec'
   gem 'webmock'
   gem 'rspec-rails', '~> 6.1.0'

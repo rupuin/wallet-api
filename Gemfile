@@ -43,6 +43,7 @@ group :development, :test do
   gem 'rspec-expectations', '~> 3.13.4'
   gem 'rspec-mocks', '~> 3.13.3'
   gem 'rspec-support', '~> 3.13.3'
+  gem 'sqlite3'
 end
 
 group :development do

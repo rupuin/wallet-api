@@ -15,18 +15,18 @@ Handler = Proc.new do |request, response|
     'rack.errors' => $stderr,
     'rack.multithread' => false,
     'rack.multiprocess' => true,
-    'rack.run_once' => false,
+    'rack.run_once' => false
   }
-  
+
   # Add HTTP headers
   request.header.each do |key, value|
     env_key = "HTTP_#{key.upcase.gsub('-', '_')}"
     env[env_key] = value.join(', ') if value.is_a?(Array)
   end
-  
+
   # Call Rails application
   status, headers, body = Rails.application.call(env)
-  
+
   # Set response
   response.status = status
   headers.each { |k, v| response[k] = v }

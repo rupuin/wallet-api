@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "routes": [
+    { "src": "/favicon.ico", "dest": "/public/favicon.ico" },
+    { "src": "/healthz", "dest": "/api/index.rb" },
+    { "src": "/api/(.*)", "dest": "/api/index.rb" },
+    { "src": "/(.*)", "dest": "/api/index.rb" }
+  ],
+  "functions": {
+    "api/index.rb": {
+      "memory": 2048,
+      "maxDuration": 30
+    }
+  }
+}

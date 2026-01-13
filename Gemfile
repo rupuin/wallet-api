@@ -38,7 +38,7 @@ group :development, :test do
   gem 'rubocop-rails-omakase', require: false
   gem 'rubocop-rspec'
   gem 'ruby-lsp'
-  gem 'rspec-rails', git: 'https://github.com/rspec/rspec-rails'
+  gem 'rspec-rails', '~> 6.0.0'
   gem 'webmock'
   gem 'rspec-expectations', '~> 3.13.4'
   gem 'rspec-mocks', '~> 3.13.3'

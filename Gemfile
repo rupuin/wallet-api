@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Core Rails
-gem 'rails', '~> 8.0.2'
+gem 'rails', '~> 8.1.2'
 
 # Web server (Vercel uses Rack, but keep puma for local dev)
 gem 'puma', '>= 5.0'

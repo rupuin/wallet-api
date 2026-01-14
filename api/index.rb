@@ -1,7 +1,57 @@
 require_relative '../config/environment'
+require 'stringio'
+require 'benchmark'
 
 Handler = Proc.new do |request, response|
-  # Build Rack environment from Vercel request
+  start_time = Time.now
+  puts "=== REQUEST START at #{start_time} ==="
+
+  begin
+    # Build Rack environment
+    env_build_time = Benchmark.realtime do
+      @env = build_rack_env(request)
+    end
+    puts "Environment built in #{env_build_time}s"
+
+    # Call Rails with detailed timing
+    rails_time = Benchmark.realtime do
+      @status, @headers, @body = Rails.application.call(@env)
+    end
+    puts "Rails processed in #{rails_time}s"
+
+    # Set response
+    response.status = @status
+    @headers.each { |k, v| response[k] = v unless k.downcase == 'transfer-encoding' }
+
+    # Handle body
+    body_time = Benchmark.realtime do
+      body_content = []
+      @body.each { |chunk| body_content << chunk }
+      response.body = body_content.join
+      @body.close if @body.respond_to?(:close)
+    end
+    puts "Body processed in #{body_time}s"
+
+    total_time = Time.now - start_time
+    puts "=== TOTAL TIME: #{total_time}s ==="
+
+  rescue => e
+    puts "ERROR: #{e.class} - #{e.message}"
+    puts e.backtrace.first(10).join("\n")
+
+    response.status = 500
+    response['Content-Type'] = 'application/json'
+    response.body = {
+      error: 'Internal Server Error',
+      message: e.message,
+      time_elapsed: Time.now - start_time
+    }.to_json
+  end
+end
+
+def build_rack_env(request)
+  body_content = request.body.to_s
+
   env = {
     'REQUEST_METHOD' => request.request_method,
     'PATH_INFO' => request.path,
@@ -11,24 +61,25 @@ Handler = Proc.new do |request, response|
     'SERVER_PORT' => request.port.to_s,
     'rack.version' => Rack::VERSION,
     'rack.url_scheme' => 'https',
-    'rack.input' => StringIO.new(request.body || ''),
+    'rack.input' => StringIO.new(body_content),
     'rack.errors' => $stderr,
     'rack.multithread' => false,
     'rack.multiprocess' => true,
     'rack.run_once' => false
   }
 
-  # Add HTTP headers
-  request.header.each do |key, value|
+  # Copy headers
+  request.header.each do |key, values|
     env_key = "HTTP_#{key.upcase.gsub('-', '_')}"
-    env[env_key] = value.join(', ') if value.is_a?(Array)
+    env[env_key] = values.is_a?(Array) ? values.first : values.to_s
   end
 
-  # Call Rails application
-  status, headers, body = Rails.application.call(env)
+  # Set Content-Type and Content-Length
+  if request.header['content-type']
+    env['CONTENT_TYPE'] = request.header['content-type'].first
+  end
 
-  # Set response
-  response.status = status
-  headers.each { |k, v| response[k] = v }
-  response.body = body.respond_to?(:join) ? body.join : body.to_s
+  env['CONTENT_LENGTH'] = body_content.bytesize.to_s
+
+  env
 end
